@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Csf>
+	<Category name="client" description="客户端运行引擎需要的配置">
+		<Item name="csf.retry.policy">
+			<value>RetryNTimes(0)</value>
+			<description>客户端集群策略（重试策略）：重试N次,括号中为0或负数不重试</description>
+		</Item>
+		<Item name="csf.client.log.collection.extend">
+			<value>com.ai.aif.csf.client.extend.log.CollectionAppframeExtend</value>
+			<description>客户端日志收集配置</description>
+		</Item>
+		<!--客户端，需要将UserInfo传递到服务端的配置-->
+		<Item name="csf.client.extend">
+			<value>com.ai.aif.csf.client.extend.appframe.ClientAppframeExtend</value>
+			<description>
+				客户端扩展，可以扩展是否携带用户信息，是否根据regionid路由
+				默认不携带appframe相关的对象
+			</description>
+		</Item>
+		<Item name="csf.client.serviceinfo.fetcher">
+			<value>com.ai.aif.csf.client.service.info.fetcher.FetchServiceInfoFromServiceRouter</value>
+			<description>
+				客户端获取服务信息的方式
+				从服务路由器获取配置为
+				com.ai.aif.csf.client.service.info.fetcher.FetchServiceInfoFromServiceRouter
+				从jvm缓存中获取（通常在开发的时候使用，这样服务路由器可以对开发透明）com.ai.aif.csf.db.client.service.info.fetcher.FetchServiceInfoFromDBCache
+			</description>
+		</Item>
+		<Item name="csf.client.exception.handler">
+			<value>com.ai.aif.csf.client.service.exception.handler.DefaultClientExceptionHandler
+			</value>
+			<description>
+				1、该配置开放对业务异常的处理，可以对异常进行收缩（广西）或其他处理;
+				2、框架默认实现，直接将此类异常抛出，不做处理
+				3、广西异常收缩实现类com.ai.aif.csf.platform.exception.filter.ExceptionShrinkFilter
+			</description>
+		</Item>
+		<ChildCategory name="client.timeout" description="客户端超时配置">
+			<Item name="csf.client.default.connection.timeout">
+				<value>10000</value>
+				<description>客户端默认连接创建时间，毫秒为单位；必须配置，不配置报错</description>
+			</Item>
+			<Item name="csf.client.default.socket.timeout">
+				<value>10000</value>
+				<description>客户端默认socket不活动最大时间，毫秒为单位；必须配置，不配置报错</description>
+			</Item>
+		</ChildCategory>
+		<ChildCategory name="client.warmup" description="客户端预热">
+			<Item name="warm.interceptor" description="客户端预热">
+				<value/>
+				<description>
+					1、预热拦截器，做预热前、预热后、预热失败的处理 以分号;分割
+					2、实现接口com.ai.aif.csf.api.common.warmup.IWarmupInterceptor
+				</description>
+			</Item>
+			<Item name="warm.upper" description="客户端预热">
+				<value>com.ai.esop.inter.client.WarmCache</value>
+				<description>
+					1、预热实现类,以分号;分割
+					2、com.ai.aif.csf.api.common.warmup.IWarmUpper
+				</description>
+			</Item>
+		</ChildCategory>
+		<ChildCategory name="client.circuitbreak" description="客户端熔断器配置"> 
+      <Item name="circuitbreaker.enable"> 
+        <value>false</value>  
+        <description>是否启动熔断器，默认为true</description> 
+      </Item>  
+      <Item name="circuitbreaker.host.error.threshold.percentage"> 
+        <value>100</value>  
+        <description>主机熔断的错误率</description> 
+      </Item>  
+      <Item name="circuitbreaker.service.error.threshold.percentage"> 
+        <value>90</value>  
+        <description>服务熔断的错误率</description> 
+      </Item>  
+      <Item name="circuitbreaker.statistics.window"> 
+        <value>60000</value>  
+        <description>百分比统计窗口跨度，毫秒为单位</description> 
+      </Item>  
+      <Item name="circuitbreaker.request.volume.threshold"> 
+        <value>10</value>  
+        <description>统计窗口跨度内的请求个数阀值，如果没有达到该阀值，即使全部失败也不会熔断</description> 
+      </Item> 
+    </ChildCategory> 
+	</Category>
+
+	<Category name="common" description="客户端和服务端都需要的配置">
+		<Item name="app.mapping">
+			<ClusterMapping> 
+        <center name="iot"> 
+          <cluster name="crm_iot_ncrm"> 
+            <group name="normal"> 
+              <app name="crm_iot_ncrm"/> 
+            </group> 
+          </cluster>
+          <cluster name="crm_iot_ecrm"> 
+            <group name="normal"> 
+              <app name="crm_iot_ecrm"/> 
+            </group> 
+          </cluster>
+          <cluster name="crm_iot_api"> 
+            <group name="normal"> 
+              <app name="crm_iot_api"/> 
+            </group>
+          </cluster>
+		  <cluster name="crm_iot_center"> 
+            <group name="normal"> 
+              <app name="crm_iot_center"/> 
+            </group>
+          </cluster>
+        </center>
+        <center name="ord"> 
+          <cluster name="crm_ord_center"> 
+            <client name="crm_iot_center"/> 
+          </cluster> 
+          <cluster name="crm_ord_other"> 
+            <client name="crm_iot_ncrm"/> 
+          </cluster> 		  
+          <cluster name="crm_ord_ecrm"> 
+            <client name="crm_iot_ecrm"/> 
+          </cluster>  
+          <cluster name="crm_ord_scrm"> 
+            <client name="crm_iot_api"/>
+          </cluster> 
+        </center>  
+        <center name="cust"> 
+          <cluster name="crm_cust_center"> 
+            <client name="crm_iot_center"/> 
+          </cluster>
+		  <cluster name="crm_cust_kf"> 
+            <client name="crm_iot_ncrm"/> 
+          </cluster>  
+          <cluster name="crm_cust_mobile"> 
+            <client name="crm_iot_api"/> 
+          </cluster>  
+          <cluster name="crm_cust_ecrm"> 
+            <client name="crm_iot_ecrm"/> 
+          </cluster> 
+        </center>  
+        <center name="ocrm"> 
+		  <cluster name="crm_ocrm_order"> 
+            <client name="crm_iot_center"/> 
+          </cluster>
+          <cluster name="crm_ocrm_order"> 
+            <client name="crm_iot_ncrm"/> 
+          </cluster>  
+          <cluster name="crm_ocrm_order"> 
+            <client name="crm_iot_ecrm"/> 
+          </cluster>  
+          <cluster name="crm_ocrm_order"> 
+            <client name="crm_iot_api"/> 
+          </cluster> 
+        </center>  
+        <center name="rule"> 
+		  <cluster name="crm_rule_center"> 
+            <client name="crm_iot_center"/> 
+          </cluster>
+          <cluster name="crm_rule_other"> 
+            <client name="crm_iot_ncrm"/> 
+          </cluster>  
+          <cluster name="crm_rule_ecrm"> 
+            <client name="crm_iot_ecrm"/> 
+          </cluster>  
+          <cluster name="crm_rule_kf"> 
+            <client name="crm_iot_api"/> 
+          </cluster> 
+        </center>  
+        <center name="res"> 
+		  <cluster name="crm_res_center"> 
+            <client name="crm_iot_center"/> 
+          </cluster>
+          <cluster name="crm_res_ecrm"> 
+            <client name="crm_iot_ecrm"/> 
+          </cluster>  
+          <cluster name="crm_res_kf"> 
+            <client name="crm_iot_ncrm"/> 
+          </cluster>  
+          <cluster name="crm_res_other"> 
+            <client name="crm_iot_api"/> 
+          </cluster> 
+        </center>  
+		<center name="ent">
+            <cluster name="crm_ent_center"></cluster>
+        </center>
+        <center name="ams">
+          <cluster name="crm_ams_center">
+          </cluster>
+        </center>
+      </ClusterMapping>
+		</Item>
+		<Item name="csf.integrated.centers">
+			<value>esop</value>
+			<description>
+                1、中心集成定义(当前有哪些中心的代码是部署在一起的,以分号分割，比如order;product;
+                2、对于前后端分离/融合中心，前端的该文件都配置为force@remote
+			</description>
+		</Item>
+		<Item name="zk.server.list">
+			<value>10.78.145.43:2183,10.78.145.44:2183,10.78.220.25:2183,10.78.220.26:2183,10.70.216.40:2183</value>
+			<description>多个地址用逗号(,)隔开</description>
+		</Item>
+	</Category>
+</Csf>

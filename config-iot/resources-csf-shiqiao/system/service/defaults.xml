@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<defaults>
+  <!--中心的类型和实现类的对应关系 -->
+  <center>
+    <property name="RegionId" value="com.ai.common.center.csf.RegionIdCenterImpl" />
+    <property name="EspId" value="com.ai.esop.common.center.EspIdCenterImpl" />
+    <property name="OrderId" value="com.ai.common.center.csf.OrderIdCenterImpl" />
+    <property name="BillId:KeyNum" value="com.ai.common.center.csf.BillIdCenterImpl"/>
+<property name="AcctId" value="com.ai.common.center.csf.AcctIdCenterImpl"/>
+<property name="CustId:CUSTOMER_ID" value="com.ai.common.center.csf.CustIdCenterImpl"/>
+<property name="UserId" value="com.ai.common.center.csf.UserIdCenterImpl"/>
+  </center>
+  <proxy invoke="pojo" type="primitive">
+    <clazz name="com.ai.appframe2.complex.service.impl.LocalServiceInvokeImpl" />
+  </proxy>
+  <!--默认代理调用方式.默认采用pojo的模式进行调用，采用的实现类为配置的实现类 -->
+  <!--默认事务信息.默认采用Required的方式进行事务操作，采用的实现类为配置的实现类 -->
+  <transaction type="Required">
+    <!--<clazz name="com.ai.appframe2.complex.transaction.impl.LocalTransactionImpl"/> -->
+    <clazz
+      name="com.ai.appframe2.complex.transaction.impl.LocalMutilTransactionImpl" />
+    <!--<listener name="com.ai.appframe2.complex.transaction.listener.TestListenerImpl"/> -->
+    <!--映射每个服务模块对应的事务数据源，可以具体到类名 -->
+    <!-- Omframe事务监听类，用于清除线程变量 -->
+    <!-- <listener name="com.ai.omframe.util.OmTransactionListenerImpl"/> -->
+    <mapping>
+      <property name="com.ai" value="iotbase" />
+      <property name="com.asiainfo" value="iotbase" />
+      <property name="com.ai.esp" value="esop" />
+      <property name="com.ai.aif" value="csf" />
+      <property name="com.ai.esop.service.deposit" value="ecrm" />
+      <property name="com.ai.esop.service.protocol" value="ecrm" />
+      <property name="com.ai.esop.service.esp" value="esop" />
+      <property name="com.ai.esop.service.template" value="esop" />
+      <property name="com.ai.comframe.ext.configuration" value="iotbase" />
+      <property name="com.ai.comframe.ext.vm" value="esop" />
+      <property name="com.ai.esop.configure.cache.esopcache" value="esop" />
+      <property name="com.ai.esop.service.ioe" value="ecrm" />
+      <property name="com.ai.esop.service.ioe.group" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.ioe.resused" value="esop"/>
+      <property name="com.ai.esop.service.approval" value="esop"/>
+      <property name="com.ai.esop.service.requisition" value="ecrm"/>
+      <property name="com.ai.esop.service.rh" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.groupmember" value="party"/>
+      <property name="com.ai.esop.service.ioe.busimember" value="party"/>
+      <property name="com.ai.esop.service.ioe.ftp" value="aibatch"/>
+      <property name="com.ai.esop.service.ioe.simstate" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.ioe.check" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.batch" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.warn.datasync" value="esop"/>
+      <property name="com.ai.esop.service.ioe.device.user" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.centralizedAudit" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.siminfo" value="iot"/>
+      <property name="com.ai.iot.service.intelligentmanagement" value="ecrm"/>
+      <property name="com.ai.iot.service.cardmanage.mgr.ecrm" value="ecrm"/>
+      <property name="com.ai.iot.service.cardmanage.mgr.iot" value="iot"/>
+      <property name="com.ai.iot.service.operationmanagement" value="iot" />
+      <property name="com.ai.iot.service.ctboss" value="iot"/>
+      <property name="com.ai.iot.cache.dao.iotcache" value="iot"/>
+      <property name="com.ai.esop.service.exe.ioe.task" value="aiopen"/>
+      <property name="com.ai.iot.service.order" value="iot"/>
+      <property name="com.ai.iot.service.tradeview" value="iot"/>
+      <property name="com.ai.esop.service.ioe.parse" value="iot"/>
+      <property name="com.ai.esop.service.ioe.oplog" value="ecrm"/>
+      <property name="com.ai.iot.service.documentmanage" value="iot" />
+      <property name="com.ai.iot.service.aopinvokedinfo" value="aiopen"/>
+       <property name="com.ai.iot.service.customermanage.mgr.iot" value="iot"/>
+      <property name="com.ai.iot.service.appgroup" value="iot"/>
+      <property name="com.ai.iot.service.aopinvokedinfo" value="iot"/>
+	  <property name="com.ai.iot.service.iotpartnerlib" value="iot"/>
+	  <property name="com.ai.iot.service.realnameuserreg" value="iot"/>
+	  <property name="com.ai.cmiot.protocol" value="iot"/>
+	  <property name="com.ai.cmiot.service.approvalinfo" value="iot"/>
+	  <property name="com.ai.iot.service.orginfosynmanage" value="iot"/>
+	  <property name="com.ai.iot.service.whitelistmanage" value="iot"/>
+    </mapping>
+  </transaction>
+  <!--默认数据源信息 -->
+  <datasource>
+    <!--根据base取数据库配置，然后以本配置中的覆盖除base以外的连接池的配置 -->
+    <!--默认 type=dbcp db=oracle -->
+    <!--映射每个DAO模块对应的操作数据源 -->
+    <clazz name="com.ai.appframe2.complex.datasource.impl.LocalMutilDataSourceImpl">
+      <property name="tableName" value="cfg_db_acct"/>
+      <property name="urlTableName" value="cfg_db_url"/>
+      <property name="relatTableName" value="cfg_db_relat"/>
+      <property name="prefetch" value="true"/>
+      <property name="prefetch.driverClassName" value="oracle.jdbc.OracleDriver"/>
+      <property name="prefetch.url" value="jdbc:oracle:thin:@(DESCRIPTION_LIST=(LOAD_BALANCE=off)(FAILOVER=on)(DESCRIPTION=(ADDRESS_LIST=(LOAD_BALANCE=OFF)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=zjpub1.yw.zj.chinamobile.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=zjpub)(INSTANCE_NAME=zjpub1)(FAILOVER_MODE=(TYPE=session)(METHOD=basic)(RETRIES=4)(DELAY=1))))(DESCRIPTION=(ADDRESS_LIST=(LOAD_BALANCE=OFF)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=zjpub2.yw.zj.chinamobile.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=zjpub)(INSTANCE_NAME=zjpub2)(FAILOVER_MODE=(TYPE=session)(METHOD=basic)(RETRIES=4)(DELAY=1)))))"/>
+      <property name="prefetch.username" value="iotbase_hd"/>
+      <property name="prefetch.password" value="{RC2}H6iu/Mo9S1jn/YtY"/>
+      <property name="prefetch.initialSize" value="1"/>
+      <property name="prefetch.maxTotal" value="1"/>
+      <property name="prefetch.maxIdle" value="1"/>
+    </clazz>
+    <pool name="iotbase" primary="true" type="dbcp" db="oracle" isAdvanceUrl="true">
+      <property name="initialSize" value="0"/>
+      <property name="maxTotal" value="8"/>
+      <property name="maxIdle" value="0"/>
+      <property name="minIdle" value="0"/>
+      <property name="maxWaitMillis" value="2000"/>
+      <property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=120000"/>
+	  <property name="url" value="jdbc:oracle:thin:@(DESCRIPTION_LIST=(LOAD_BALANCE=off)(FAILOVER=on)(DESCRIPTION=(ADDRESS_LIST=(LOAD_BALANCE=OFF)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=zjpub1.yw.zj.chinamobile.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=zjpub)(INSTANCE_NAME=zjpub1)(FAILOVER_MODE=(TYPE=session)(METHOD=basic)(RETRIES=4)(DELAY=1))))(DESCRIPTION=(ADDRESS_LIST=(LOAD_BALANCE=OFF)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=zjpub2.yw.zj.chinamobile.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=zjpub)(INSTANCE_NAME=zjpub2)(FAILOVER_MODE=(TYPE=session)(METHOD=basic)(RETRIES=4)(DELAY=1)))))"/>
+      <property name="username" value="iotbase"/>
+      <property name="password" value="{RC2}H6iu/Mo9S1jn/YtY"/>
+
+      <!--连接池有效性检查-->
+      <property name="validationQuery" value="select 1 from dual"/>
+      <property name="testWhileIdle" value="true"/>
+      <property name="testOnBorrow" value="false"/>
+      <property name="testOnReturn" value="false"/>
+      <!--最多20秒检查到连接失效-->
+      <property name="timeBetweenEvictionRunsMillis" value="20000"/>
+      <property name="minEvictableIdleTimeMillis" value="-1"/>
+      <property name="softMinEvictableIdleTimeMillis" value="1800000"/>
+      <property name="numTestsPerEvictionRun" value="2"/>
+    </pool>
+
+    <pool name="esop"  type="dbcp" db="oracle" isAdvanceUrl="true">
+      <property name="initialSize" value="0"/>
+      <property name="maxTotal" value="8"/>
+      <property name="maxIdle" value="2"/>
+      <property name="minIdle" value="1"/>
+      <property name="maxWaitMillis" value="2000"/>
+      <property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=120000"/>
+
+      <!--连接池有效性检查-->
+      <property name="validationQuery" value="select 1 from dual"/>
+      <property name="testWhileIdle" value="true"/>
+      <property name="testOnBorrow" value="false"/>
+      <property name="testOnReturn" value="false"/>
+      <!--最多20秒检查到连接失效-->
+      <property name="timeBetweenEvictionRunsMillis" value="20000"/>
+      <property name="minEvictableIdleTimeMillis" value="-1"/>
+      <property name="softMinEvictableIdleTimeMillis" value="1800000"/>
+      <property name="numTestsPerEvictionRun" value="2"/>
+    </pool>
+    <pool name="csf" type="dbcp" db="oracle" isAdvanceUrl="true">
+      <property name="initialSize" value="0"/>
+      <property name="maxTotal" value="8"/>
+      <property name="maxIdle" value="0"/>
+      <property name="minIdle" value="0"/>
+      <property name="maxWaitMillis" value="2000"/>
+      <property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=120000"/>
+
+      <!--连接池有效性检查-->
+      <property name="validationQuery" value="select 1 from dual"/>
+      <property name="testWhileIdle" value="true"/>
+      <property name="testOnBorrow" value="false"/>
+      <property name="testOnReturn" value="false"/>
+      <!--最多20秒检查到连接失效-->
+      <property name="timeBetweenEvictionRunsMillis" value="20000"/>
+      <property name="minEvictableIdleTimeMillis" value="-1"/>
+      <property name="softMinEvictableIdleTimeMillis" value="1800000"/>
+      <property name="numTestsPerEvictionRun" value="2"/>
+    </pool>
+    <pool name="ecrm"  type="dbcp" db="oracle" isAdvanceUrl="true">
+      <property name="initialSize" value="0"/>
+      <property name="maxTotal" value="8"/>
+      <property name="maxIdle" value="2"/>
+      <property name="minIdle" value="1"/>
+      <property name="maxWaitMillis" value="2000"/>
+      <property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=120000"/>
+
+      <!--连接池有效性检查-->
+      <property name="validationQuery" value="select 1 from dual"/>
+      <property name="testWhileIdle" value="true"/>
+      <property name="testOnBorrow" value="false"/>
+      <property name="testOnReturn" value="false"/>
+      <!--最多20秒检查到连接失效-->
+      <property name="timeBetweenEvictionRunsMillis" value="20000"/>
+      <property name="minEvictableIdleTimeMillis" value="-1"/>
+      <property name="softMinEvictableIdleTimeMillis" value="1800000"/>
+      <property name="numTestsPerEvictionRun" value="2"/>
+    </pool>
+
+  
+    <pool name="aibatch"  type="dbcp" db="oracle" isAdvanceUrl="true">
+      <property name="initialSize" value="0"/>
+      <property name="maxTotal" value="8"/>
+      <property name="maxIdle" value="2"/>
+      <property name="minIdle" value="1"/>
+      <property name="maxWaitMillis" value="2000"/>
+      <property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=120000"/>
+
+      <!--连接池有效性检查-->
+      <property name="validationQuery" value="select 1 from dual"/>
+      <property name="testWhileIdle" value="true"/>
+      <property name="testOnBorrow" value="false"/>
+      <property name="testOnReturn" value="false"/>
+      <!--最多20秒检查到连接失效-->
+      <property name="timeBetweenEvictionRunsMillis" value="20000"/>
+      <property name="minEvictableIdleTimeMillis" value="-1"/>
+      <property name="softMinEvictableIdleTimeMillis" value="1800000"/>
+      <property name="numTestsPerEvictionRun" value="2"/>
+    </pool>
+    <pool name="report" init="true" isAdvanceUrl="true">
+      <property name="initialSize" value="0" />
+      <property name="maxTotal" value="2" />
+      <property name="maxIdle" value="2" />
+      <property name="maxWaitMillis" value="2000"/>
+    </pool>
+    <pool name="iot" init="true" isAdvanceUrl="true">
+      <property name="initialSize" value="2" />
+      <property name="maxTotal" value="20" />
+      <property name="maxIdle" value="2" />
+      <property name="maxWaitMillis" value="2000"/>
+    </pool>
+    <pool name="aiopen" init="true" isAdvanceUrl="true">
+            <property name="initialSize" value="1"/>
+            <property name="maxTotal" value="5"/>
+            <property name="maxIdle" value="10"/>
+            <property name="maxWaitMillis" value="2000"/>
+          </pool>
+
+
+
+    <mapping>
+      <property name="com.ai" value="iotbase" />
+      <property name="com.asiainfo" value="iotbase" />
+      <property name="com.ai.esp" value="esop" />
+      <property name="com.ai.aif" value="csf" />
+      <property name="com.ai.esop.service.deposit" value="ecrm" />
+      <property name="com.ai.esop.service.protocol" value="ecrm" />
+      <property name="com.ai.esop.service.esp" value="esop" />
+      <property name="com.ai.esop.service.template" value="esop" />
+      <property name="com.ai.comframe.ext.configuration" value="iotbase" />
+      <property name="com.ai.comframe.ext.vm" value="esop" />
+      <property name="com.ai.esop.configure.cache.esopcache" value="esop" />
+      <property name="com.ai.esop.service.ioe" value="ecrm" />
+      <property name="com.ai.esop.service.ioe.group" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.ioe.resused" value="esop"/>
+      <property name="com.ai.esop.service.approval" value="esop"/>
+      <property name="com.ai.esop.service.requisition" value="ecrm"/>
+      <property name="com.ai.esop.service.rh" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.groupmember" value="party"/>
+      <property name="com.ai.esop.service.ioe.busimember" value="party"/>
+      <property name="com.ai.esop.service.ioe.ftp" value="aibatch"/>
+      <property name="com.ai.esop.service.ioe.simstate" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.ioe.check" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.batch" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.warn.datasync" value="esop"/>
+      <property name="com.ai.esop.service.ioe.device.user" value="so{CENTER}"/>
+      <property name="com.ai.esop.service.centralizedAudit" value="ecrm"/>
+      <property name="com.ai.esop.service.ioe.siminfo" value="iot"/>
+      <property name="com.ai.iot.service.intelligentmanagement" value="ecrm"/>
+      <property name="com.ai.iot.service.cardmanage.mgr.ecrm" value="ecrm"/>
+      <property name="com.ai.iot.service.cardmanage.mgr.iot" value="iot"/>
+      <property name="com.ai.iot.service.operationmanagement" value="iot" />
+      <property name="com.ai.iot.service.ctboss" value="iot"/>
+      <property name="com.ai.iot.cache.dao.iotcache" value="iot"/>
+      <property name="com.ai.esop.service.exe.ioe.task" value="aiopen"/>
+      <property name="com.ai.iot.service.order" value="iot"/>
+      <property name="com.ai.iot.service.tradeview" value="iot"/>
+      <property name="com.ai.esop.service.ioe.parse" value="iot"/>
+      <property name="com.ai.esop.service.ioe.oplog" value="ecrm"/>
+      <property name="com.ai.iot.service.documentmanage" value="iot" />
+      <property name="com.ai.iot.service.aopinvokedinfo" value="aiopen"/>
+      <property name="com.ai.iot.service.customermanage.mgr.iot" value="iot"/>
+      <property name="com.ai.iot.service.appgroup" value="iot"/>
+      <property name="com.ai.iot.service.aopinvokedinfo" value="iot"/>
+	  <property name="com.ai.iot.service.iotpartnerlib" value="iot"/>
+	  <property name="com.ai.iot.service.realnameuserreg" value="iot"/>
+	  <property name="com.ai.cmiot.protocol" value="iot"/>
+	  <property name="com.ai.cmiot.service.approvalinfo" value="iot"/>
+	  <property name="com.ai.iot.service.orginfosynmanage" value="iot"/>
+	  <property name="com.ai.iot.service.whitelistmanage" value="iot"/>
+    </mapping>
+  </datasource>
+</defaults>

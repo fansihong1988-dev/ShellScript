@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CacheConfig>
+
+    <!-- 配置来源配置 -->
+    <ConfigKind name="config">
+        <ConfigItem name="configSrc" remark="配置来源，FILE:文件；DB:数据库">FILE</ConfigItem>
+		<ConfigItem name="system" remark="系统名称(动态缓存必须配置)">IOT</ConfigItem>
+    </ConfigKind>
+
+    <!-- Zookeeper配置-->
+    <ConfigKind name="zk">
+        <ConfigItem name="zkServerList" remark="zk">aicache:aicache_1Q#@aicache-sqzk1.yw.zj.chinamobile.com:2181,aicache-sqzk2.yw.zj.chinamobile.com:2181,aicache-sqzk3.yw.zj.chinamobile.com:2181,aicache-sqzk4.yw.zj.chinamobile.com:2181,aicache-sqzk5.yw.zj.chinamobile.com:2181</ConfigItem>
+        <ConfigItem name="zkCatalog" remark="zk目录">/aicache</ConfigItem>
+    </ConfigKind>
+
+    <!-- 缓存路由配置 -->
+    <cache_routers>
+        <cache_router data_type="IOT" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="COMMON" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="CSF" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="IOT_MSISDN" cache_type="redis" belong_group="IOT" group_type="cluster" status="U"/>
+
+		 <!-- redis对应的集群配置 -->
+        <cache_router data_type="PCECache" cache_type="redis" group_type="cluster" belong_group="redis_group4" status="U"/>
+        <cache_router data_type="PCECache" cache_type="redis" group_type="cluster" belong_group="redis_group5" status="U"/>
+        <cache_router data_type="PCECache" cache_type="redis" group_type="cluster" belong_group="redis_group6" status="U"/>
+
+
+    </cache_routers>
+
+    <!-- 缓存参数配置 -->
+    <cache_parameters>
+        <parameter server_code="REDIS" parameter_name="MaxActive" parameter_value="40" state="U"/>
+        <parameter server_code="REDIS" parameter_name="MaxIdle" parameter_value="20" state="U"/>
+        <parameter server_code="REDIS" parameter_name="MaxWait" parameter_value="5000" state="U"/>
+        <parameter server_code="REDIS" parameter_name="TestOnBorrow" parameter_value="true" state="U"/>
+        <parameter server_code="REDIS" parameter_name="NeedWriteSYN" parameter_value="true" state="U"/>
+
+		<parameter server_code="PCE" parameter_name="MaxActive" parameter_value="8" state="U"/>
+        <parameter server_code="PCE" parameter_name="MaxIdle" parameter_value="3" state="U"/>
+        <parameter server_code="PCE" parameter_name="MaxWait" parameter_value="5000" state="U"/>
+        <parameter server_code="PCE" parameter_name="TestOnBorrow" parameter_value="true" state="U"/>
+        <parameter server_code="PCE" parameter_name="NeedWriteSYN" parameter_value="true" state="U"/>
+
+        <!-- redis驱动类配置 -->
+        <parameter server_code="REDIS" parameter_name="Driver" parameter_value="com.ai.aif.aicache.client.pce.driver.RedisBufferedDriverLocalCache" state="U"/>
+        <!-- memcache驱动类配置 -->
+        <parameter server_code="MEMCACHED" parameter_name="Driver" parameter_value="com.ai.aif.aicache.client.pce.driver.MemcachedBufferedDriverLocalCache" state="U"/>
+        <!-- memcache连接获取代理类 -->
+        <parameter server_code="MEMCACHED" parameter_name="Policy" parameter_value="com.asiainfo.appframe.ext.exeframe.cache.util.lb.RoundRobinPolicy" state="U"/>
+        <!-- memcache连接池相关配置 -->
+        <parameter server_code="MEMCACHED" parameter_name="ConnMin" parameter_value="20" state="U"/>
+        <parameter server_code="MEMCACHED" parameter_name="ConnMax" parameter_value="20" state="U"/>
+        <parameter server_code="MEMCACHED" parameter_name="ConnTimeout" parameter_value="2" state="U"/>
+        <parameter server_code="MEMCACHED" parameter_name="ServerName" parameter_value="product" state="U"/>
+        <!-- 验证代理类 -->
+        <parameter server_code="COMMON" parameter_name="Validate" parameter_value="com.ai.aif.aicache.client.pce.validate.NormalValidateImpl" state="U"/>
+        <parameter server_code="COMMON" parameter_name="ValidateKey" parameter_value="validate.IsReady" state="U"/>
+        <parameter server_code="COMMON" parameter_name="ValidateValue" parameter_value="OK" state="U"/>
+        <!-- 连接检查定时器延时时间 -->
+        <parameter server_code="COMMON" parameter_name="ChecktaskDelay" parameter_value="3" state="U"/>
+        <!-- 连接检查定时器每次启动间隔时间 -->
+        <parameter server_code="COMMON" parameter_name="ChecktaskPeriod" parameter_value="2" state="U"/>
+        <!-- 缓存清空定时器校验的最大时间差 -->
+        <parameter server_code="COMMON" parameter_name="StatDiffTime" parameter_value="60" state="U"/>
+        <!-- 缓存清空定时器每天清空的固定时间 -->
+        <parameter server_code="COMMON" parameter_name="FixedTime" parameter_value="02:30,06:30" state="U"/>
+        <!-- 缓存清空定时器每次启动间隔时间 -->
+        <parameter server_code="COMMON" parameter_name="CheckInterval" parameter_value="30" state="U"/>
+        <!-- 本地缓存MAP的相关配置 -->
+        <parameter server_code="COMMON" parameter_name="MaxByteSize" parameter_value="5242880" state="U"/>
+        <parameter server_code="COMMON" parameter_name="CompressThreshold" parameter_value="1048576" state="U"/>
+        <parameter server_code="COMMON" parameter_name="LocalCacheBucket" parameter_value="10" state="U"/>
+        <parameter server_code="COMMON" parameter_name="LocalCacheLimitBytes" parameter_value="80485760" state="U"/>
+        <!--产品缓存预热监听-->
+        <parameter server_code="COMMON" parameter_name="LocalCacheClearListener" parameter_value="com.ai.pce.service.impl.PrePceCacheLoadListener" state="E" />
+        <!-- 缓存获取重试次数 -->
+        <parameter server_code="COMMON" parameter_name="FailoverRetry" parameter_value="4" state="U"/>
+        <!-- 缓存获取类型 -->
+        <parameter server_code="COMMON" parameter_name="CacheType" parameter_value="redis" state="U"/>
+        <!-- 是否开启本地缓存 -->
+        <parameter server_code="COMMON" parameter_name="IsOpenLocalCache" parameter_value="true" state="U"/>
+        <!-- 是否使用DB -->
+        <parameter server_code="COMMON" parameter_name="IsUseDb" parameter_value="false" state="U"/>
+        <!--命中采集开关-->
+        <parameter server_code="RANKING_REDIS" parameter_name="isMonitor" parameter_value="true" state="U"/>
+        <!--命中采集使用二级缓存开关-->
+        <parameter server_code="RANKING_REDIS" parameter_name="MonitorIsLocal" parameter_value="true" state="U"/>
+        <!--命中采集连接redis超时时间（单位：毫秒）-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRedisTimeOut" parameter_value="10000" state="U"/>
+        <!--#命中采集数据上传redis服务器key数阈值,默认100-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitMemberNum" parameter_value="100" state="U"/>
+        <!--命中采集数据异步上传至redis定时任务刷新检查时间间隔(单位分钟)-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitUploadCheckInter" parameter_value="1" state="U"/>
+        <!--#命中采集数据上传redis服务器,本地命中缓存数据大小数阈值,默认1000-->
+        <parameter server_code="RANKING_REDIS" parameter_name="MaxByteSize" parameter_value="1000" state="U"/>
+        <!--#命中采集数据上传redis服务器,上传时间间隔,默认60(单位分钟)-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitUploadTimeInter" parameter_value="30" state="U"/>
+        <!--#命中采集数据上传redis服务器,本地缓存信息上传时间间隔,默认10(单位分钟)-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitLocalUploadTimeInter" parameter_value="60" state="U"/>
+        <!--#命中采集数据上传redis服务器,本地缓存信息上传后失效时间,默认30(天)-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitInfoExpireTime" parameter_value="2" state="U"/>
+        <!--命中采集数据预加载取命中排行前N或百分比类型,PER为百分比、TOP为前N-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRankingPreLoadType" parameter_value="PER" state="U"/>
+        <!--命中采集数据预加载取命中排行前N或百分比,含义由HitRankingPreLoadType配置决定-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRankingTop" parameter_value="10" state="U"/>
+        <!--命中采集数据预加载同类缓存分组预加载大小,默认1000-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRankingPreLoadGroupNum" parameter_value="5000" state="U"/>
+        <!--命中采集数据排行最大排行展示，默认100-->
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRankingShowMax" parameter_value="10" state="U"/>
+        <!--命中redis连接池管理-->
+        <parameter server_code="RANKING_REDIS" parameter_name="MaxActive" parameter_value="40" state="U"/>
+        <parameter server_code="RANKING_REDIS" parameter_name="MaxIdle" parameter_value="20" state="U"/>
+        <parameter server_code="RANKING_REDIS" parameter_name="MaxWait" parameter_value="5000" state="U"/>
+        <!--命中采集数据采集，本地缓存相关配置-->
+        <parameter server_code="RANKING_REDIS" parameter_name="LocalCacheBucket" parameter_value="10" state="U"/>
+        <parameter server_code="RANKING_REDIS" parameter_name="LocalCacheLimitBytes" parameter_value="80485760" state="U"/>
+        <parameter server_code="RANKING_REDIS" parameter_name="HitRedisClusterName" parameter_value="mymaster" state="U"/>
+        <parameter server_code="COMMON" parameter_name="VersionKey" parameter_value="VERSION01,VERSION02,VERSION03,VERSION04,VERSION05,VERSION06,VERSION07,VERSION08,VERSION09,VERSION10" state="U"/>
+
+    </cache_parameters>
+
+    <!-- 缓存服务器配置 -->
+    <cache_servers>
+    	<server server_code="M" server_ip="aicachejtredissq1.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="1" requirepass="cmVkaXM=" state="U" remarks="" />
+<server server_code="M" server_ip="aicachejtredissq2.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="2" requirepass="cmVkaXM=" state="U" remarks="" />
+<server server_code="M" server_ip="aicachejtredissq3.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="3" requirepass="cmVkaXM=" state="U" remarks="" />
+<server server_code="M" server_ip="aicachejtredissq4.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="4" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.113" server_port="6203" belong_group="IOT" group_sort="1" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.114" server_port="6203" belong_group="IOT" group_sort="2" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.112" server_port="6202" belong_group="IOT" group_sort="3" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.113" server_port="6202" belong_group="IOT" group_sort="4" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.114" server_port="6201" belong_group="IOT" group_sort="5" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.112" server_port="6201" belong_group="IOT" group_sort="6" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+
+		
+
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa01.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group4" group_sort="1" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa02.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group4" group_sort="2" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa03.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group4" group_sort="3" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa04.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group4" group_sort="4" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa05.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group4" group_sort="5" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqa06.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group4" group_sort="6" requirepass="cmVkaXM=" state="U" remarks="" />
+
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb01.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group5" group_sort="1" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb02.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group5" group_sort="2" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb03.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group5" group_sort="3" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb04.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group5" group_sort="4" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb05.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group5" group_sort="5" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqb06.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group5" group_sort="6" requirepass="cmVkaXM=" state="U" remarks="" />
+
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc01.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group6" group_sort="1" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc02.yw.zj.chinamobile.com" server_port="6101" belong_group="redis_group6" group_sort="2" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc03.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group6" group_sort="3" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc04.yw.zj.chinamobile.com" server_port="6102" belong_group="redis_group6" group_sort="4" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc05.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group6" group_sort="5" requirepass="cmVkaXM=" state="U" remarks="" />
+        <server server_code="PceRedisCache" server_ip="pce-cache-sqc06.yw.zj.chinamobile.com" server_port="6103" belong_group="redis_group6" group_sort="6" requirepass="cmVkaXM=" state="U" remarks="" />
+
+
+
+
+	</cache_servers>
+
+</CacheConfig>

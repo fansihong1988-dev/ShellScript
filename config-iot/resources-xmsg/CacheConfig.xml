@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CacheConfig>
+
+    <!-- 配置来源配置 -->
+    <ConfigKind name="config">
+        <ConfigItem name="configSrc" remark="配置来源，FILE:文件；DB:数据库">FILE</ConfigItem>
+    </ConfigKind>
+
+    <!-- Zookeeper配置-->
+    <ConfigKind name="zk">
+        <ConfigItem name="zkServerList" remark="zk服务器列表">aicachezk1.yw.zj.chinamobile.com:2181,aicachezk2.yw.zj.chinamobile.com:2181,aicachezk3.yw.zj.chinamobile.com:2181,aicachezk4.yw.zj.chinamobile.com:2181,aicachezk5.yw.zj.chinamobile.com:2181</ConfigItem>
+        <ConfigItem name="zkCatalog" remark="zk目录">/aicache</ConfigItem>
+    </ConfigKind>
+
+    <!-- 缓存路由配置 -->
+    <cache_routers>
+        <cache_router data_type="IOT" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="COMMON" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="CSF" cache_type="redis" belong_group="STATIC" status="U"/>
+		 <cache_router data_type="IOT_MSISDN" cache_type="redis" belong_group="IOT" group_type="cluster" status="U"/>
+    </cache_routers>
+
+    <!-- 缓存参数配置 -->
+    <cache_parameters>
+        <parameter server_code="REDIS" parameter_name="MaxActive" parameter_value="40" state="U"/>
+        <parameter server_code="REDIS" parameter_name="MaxIdle" parameter_value="20" state="U"/>
+        <parameter server_code="REDIS" parameter_name="MaxWait" parameter_value="5000" state="U"/>
+        <parameter server_code="REDIS" parameter_name="TestOnBorrow" parameter_value="true" state="U"/>
+        <parameter server_code="REDIS" parameter_name="NeedWriteSYN" parameter_value="true" state="U"/>
+    </cache_parameters>
+
+    <!-- 缓存服务器配置 -->
+    <cache_servers>
+        <server server_code="M" server_ip="10.78.145.41" server_port="6101" belong_group="STATIC" group_sort="1" requirepass="" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.145.42" server_port="6102" belong_group="STATIC" group_sort="2" requirepass="" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.220.23" server_port="6103" belong_group="STATIC" group_sort="3" requirepass="" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.220.24" server_port="6104" belong_group="STATIC" group_sort="4" requirepass="" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.113" server_port="6203" belong_group="IOT" group_sort="1" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.114" server_port="6203" belong_group="IOT" group_sort="2" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.112" server_port="6202" belong_group="IOT" group_sort="3" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.113" server_port="6202" belong_group="IOT" group_sort="4" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.114" server_port="6201" belong_group="IOT" group_sort="5" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+        <server server_code="M" server_ip="10.78.228.112" server_port="6201" belong_group="IOT" group_sort="6" requirepass="{RC2}IvK/J9lbnD4=" state="U" remarks="" />
+    </cache_servers>
+</CacheConfig>

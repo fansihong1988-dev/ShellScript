@@ -1,0 +1,103 @@
+traceEnabled: false
+logEnabled: true
+metricEnabled: false
+# must be a power of 2
+localBufferSize: 4096
+messageBatchSize: 1
+debugLevel: INFO
+selfMonitorEnabled: false
+ipConfigPrefix: server.ip
+timeSyncEnabled: false
+ntpServer: 210.72.145.44
+sysCode: NGCRM
+channel: 1
+# file|kafka
+producerType: kafka
+producerApi: Java
+message:
+  default:
+    topic: TRACE_G1_TOPIC
+    # file|discard
+    bufferFullPolicy: discard
+  trace:
+    topic: TRACE_G3_TOPIC
+    probeType: SRV
+    sampleRatio: 1
+    isEntrance: false
+    # file|discard
+    bufferFullPolicy: discard
+  log:
+    topic: zxh_topic1
+  metric:
+    topic: METRIC_G3_TOPIC
+    timeInterval: 60
+    thread:
+      enabled: false
+      category:
+        - name: "CSF"
+          pattern: "CsfServerRequestHandleThread"
+    dataSource:
+      enabled: false
+      type: Appframe
+  custom:
+    - name: ISeeMessage
+      topic: METRIC_G3_TOPIC
+# kafka auth config
+useSecurityAuth: false
+securityFileDir: "${user.home}/securityFiles1"
+userKeytabFile: "user.keytab"
+krbConfFile: "krb5.conf"
+userPrincipal: "cs2_rzfwpt1"
+# kafka settings
+kafka:
+  default:
+    ################# Java API ################
+    bootstrap.servers: 10.70.58.70:9292,10.70.58.71:9292,10.70.58.72:9292,10.70.58.71:9392,10.70.58.72:9392
+    key.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+    value.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+    compression.type: gzip
+    # 32MB
+    buffer.memory: 33554432
+    # for each partition
+    batch.size: 8192
+    # wait up to 100ms before sending
+    linger.ms: 100
+    # greater than 0 may cause record duplication
+    retries: 0
+    # 0|1|all
+    acks: 1
+    # 如果没有开启kafkaSecurity,下面三个注释掉
+    #security.protocol: SASL_PLAINTEXT
+    #sasl.kerberos.service.name: kafka
+    #kerberos.domain.name: hadoop.hadoop.com
+    ################# Scala API ################
+    # metadata.broker.list: 10.7.5.55:9092,10.7.5.61:9092,10.7.5.62:9092
+    # producer.type: async
+    # compression.codec: snappy
+    # queue.buffering.max.ms: 100
+    # queue.buffering.max.messages: 5000
+    # batch.num.messages: 200
+    # send.buffer.bytes: 204800
+    # message.send.max.retries: 0
+    # request.required.acks: 1
+  #custom:
+  #  bootstrap.servers: 172.12.11.10:9092,72.12.11.11:9092,172.12.11.13:9092
+  #esblog:
+  #  bootstrap.servers: 192.168.3.12:9092
+  log:
+    bootstrap.servers: 10.76.185.19:21005,10.76.185.20:21005,10.76.185.32:21005,10.76.185.43:21005,10.76.185.44:21005,10.76.185.55:21005,10.76.185.56:21005,10.76.185.67:21005,10.76.185.68:21005,10.76.185.79:21005,10.76.185.80:21005,10.76.185.91:21005,10.76.185.92:21005,10.76.185.103:21005,10.76.185.31:21005
+
+# file settings
+file:
+  dataDir: "${user.home}/log4x/data"
+  bufferedIO: true
+  bufferSize: 8192
+  fileNamePattern: "%d{yyyy-MM-dd}.zip"
+  maxHistory: 7
+# if matched, drop the messages
+filters:
+  - "^.*CheckSV.*heartbeat"
+  - "^.*CommonSV.*getDBSysDate"
+  - "^.*DefaultAction.*getSysDateTime"
+  - "select 1 from dual"
+  - "C.A.A.C.A.S.ACCESS.IACCESS"
