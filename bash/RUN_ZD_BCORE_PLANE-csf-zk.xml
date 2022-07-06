@@ -1,0 +1,10 @@
+    <NameServer:zk>
+      <Item name="server.list" value="csf-zd-hxzk1.yw.zj.chinamobile.com:2181,csf-zd-hxzk2.yw.zj.chinamobile.com:2181,csf-zd-hxzk3.yw.zj.chinamobile.com:2181,csf-zd-hxzk4.yw.zj.chinamobile.com:2181,csf-zd-hxzk5.yw.zj.chinamobile.com:2181" />
+      <Item name="connection.timeout" value="40000" />
+      <Item name="session.timeout" value="20000" />
+      <Item name="retry.times" value="5" />
+      <Item name="retry.sleep.ms" value="1000" />
+      <Item name="zk.acl.auth" value="true" />
+      <Item name="zk.acl.username" value="aicsf" />
+      <Item name="zk.acl.password" value="aicsf_1Q#" />
+    </NameServer:zk>
