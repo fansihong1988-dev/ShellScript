@@ -1,0 +1,2 @@
+<!--地市大区路由缓存-->
+<cache source="aicache" dataType="COMMON" id="com.ai.appframe2.complex.cache.impl.ServiceZoneCacheImpl" init="true"/>
