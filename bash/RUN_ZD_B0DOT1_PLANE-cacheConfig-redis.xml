@@ -1,0 +1,4 @@
+    	<server server_code="M" server_ip="paas-aicache01-zd-redis1.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="1" requirepass="cmVkaXM=" state="U" remarks="" />
+      <server server_code="M" server_ip="paas-aicache01-zd-redis2.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="2" requirepass="cmVkaXM=" state="U" remarks="" />
+      <server server_code="M" server_ip="paas-aicache01-zd-redis3.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="3" requirepass="cmVkaXM=" state="U" remarks="" />
+      <server server_code="M" server_ip="paas-aicache01-zd-redis4.yw.zj.chinamobile.com" server_port="6101" belong_group="STATIC" group_sort="4" requirepass="cmVkaXM=" state="U" remarks="" />

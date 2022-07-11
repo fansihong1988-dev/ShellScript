@@ -93,35 +93,35 @@ function csfModify(){
   find $TARGET -name csf.xml|while read line;
   do
     echo $line
-    greenBoldFont $(sed -n '/<tenant>.*<\/tenant>/p' $line)
+    greenFont $(sed -n '/<tenant>.*<\/tenant>/p' $line)
   done
   echo
   h1YellowUndFont "csf模块Common节点新增<Uds/>\t\t\t"
   find $TARGET -name csf.xml|grep 'resources-csf'|while read line;
   do
     echo $line
-    greenBoldFont $(sed -n '/<Uds\/>/p' $line)
+    greenFont $(sed -n '/<Uds\/>/p' $line)
   done
   echo
   h1YellowUndFont "浙东ZK\t\t\t"
   find $TARGET -name csf.xml|grep 'RUN_ZD_BCORE_PLANE'|while read line;
   do
     echo $line
-    greenBoldFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
+    greenFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
   done
   echo
   h1YellowUndFont "杭州湾ZK\t\t\t"
   find $TARGET -name csf.xml|grep 'RUN_HZW_BCORE_PLANE'|while read line;
   do
     echo $line
-    greenBoldFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
+    greenFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
   done
   echo 
   h1YellowUndFont "浙东灰度ZK\t\t\t"
   find $TARGET -name csf.xml|grep 'RUN_ZD_B0DOT1_PLANE'|while read line;
   do
     echo $line
-    greenBoldFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
+    greenFont "$(sed -n '/<NameServer:zk>/,/<\/NameServer:zk>/p' $line)"
   done
 }                                                                          
 
@@ -133,11 +133,11 @@ function csfCache(){
   do
     if [[ $(sed -n '/<cache source="aicache" dataType="COMMON" id="com.ai.appframe2.complex.cache.impl.ServiceZoneCacheImpl" init="true"\/>/p' $cache|wc -l) -ne 0 ]];then
       echo $cache
-      greenBoldFont '<!--地市大区路由缓存--> already Add Nothing to do !'
+      greenFont '<!--地市大区路由缓存--> already Add Nothing to do !'
     else
       sed -i "" '/<\/quartz>/r csf-route.xml' $cache
       echo $cache
-      greenBoldFont "$(sed -n '/<cache source="aicache" dataType="COMMON" id="com.ai.appframe2.complex.cache.impl.ServiceZoneCacheImpl" init="true"\/>/p' $cache)"
+      greenFont "$(sed -n '/<cache source="aicache" dataType="COMMON" id="com.ai.appframe2.complex.cache.impl.ServiceZoneCacheImpl" init="true"\/>/p' $cache)"
     fi
   done
 }
@@ -151,7 +151,7 @@ function addLogback(){
     echo "[ Copy $(dirname $0)/logback.xml ] to [ $TARGET/$module ]"
     cp -f $(dirname $0)/logback.xml $TARGET/$module
     if [[ $? -eq 0 ]];then
-      greenBoldFont $(ls $TARGET/$module|grep 'logback.xml')
+      greenFont $(ls $TARGET/$module|grep 'logback.xml')
     else
       echo "Copy Failed !!!"
       exit 25
@@ -159,17 +159,122 @@ function addLogback(){
   done
 }
 
+# Modify the CacheConfig.xml file
+function cacheConfig(){
+  find $TARGET -name CacheConfig.xml|grep 'RUN_ZD_BCORE_PLANE'|while read zd; ## 浙东缓存ZK,redis
+  do
+    sed -i "" '/ConfigItem name="zkServerList".*<\/ConfigItem>$/d' $zd
+    sed -i "" '/<ConfigKind name="zk">/r RUN_ZD_BCORE_PLANE-cacheConfig-zk.xml' $zd
+    sed -i "" '/<server server_code="M".*\/>$/d' $zd
+    sed -i "" '/<cache_servers>/r RUN_ZD_BCORE_PLANE-cacheConfig-redis.xml' $zd
+    sed -i "" '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/d' $zd
+    sed -i "" '/<cache_servers>/r RUN_ZD_BCORE_PLANE-cacheConfig-product.xml' $zd
+  done
+  find $TARGET -name CacheConfig.xml|grep 'RUN_HZW_BCORE_PLANE'|while read hzw;## 杭州湾缓存ZK,redis
+  do
+    sed -i "" '/ConfigItem name="zkServerList".*<\/ConfigItem>$/d' $hzw
+    sed -i "" '/<ConfigKind name="zk">/r RUN_HZW_BCORE_PLANE-cacheConfig-zk.xml' $hzw
+    sed -i "" '/<server server_code="M".*\/>$/d' $hzw
+    sed -i "" '/<cache_servers>/r RUN_HZW_BCORE_PLANE-cacheConfig-redis.xml' $hzw
+    sed -i "" '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/d' $hzw
+    sed -i "" '/<cache_servers>/r RUN_HZW_BCORE_PLANE-cacheConfig-product.xml' $hzw
+  done
+  find $TARGET -name CacheConfig.xml|grep 'RUN_ZD_B0DOT1_PLANE'|while read zdhd;## 浙东灰度ZK,redis
+  do
+    sed -i "" '/ConfigItem name="zkServerList".*<\/ConfigItem>$/d' $zdhd
+    sed -i "" '/<ConfigKind name="zk">/r RUN_ZD_B0DOT1_PLANE-cacheConfig-zk.xml' $zdhd
+    sed -i "" '/<server server_code="M".*\/>$/d' $zdhd
+    sed -i "" '/<cache_servers>/r RUN_ZD_B0DOT1_PLANE-cacheConfig-redis.xml' $zdhd
+    sed -i "" '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/d' $zdhd
+    sed -i "" '/<cache_servers>/r RUN_ZD_B0DOT1_PLANE-cacheConfig-product.xml' $zdhd
+  done
+
+  h1RedUndFont "浙东ZK修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/ConfigItem name="zkServerList".*<\/ConfigItem>$/p' $ret)"
+    echo
+  done
+  echo
+
+  h1RedUndFont "杭州湾ZK修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_HZW_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/ConfigItem name="zkServerList".*<\/ConfigItem>$/p' $ret)"
+    echo
+  done
+
+  h1RedUndFont "浙东灰度ZK修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_B0DOT1_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/ConfigItem name="zkServerList".*<\/ConfigItem>$/p' $ret)"
+    echo
+  done
+  echo
+
+  h1RedUndFont "浙东Redis修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="M".*\/>$/p' $ret)"
+  echo
+  done
+  echo
+
+  h1RedUndFont "杭州湾Redis修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_HZW_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="M".*\/>$/p' $ret)"
+  echo
+  done
+  echo
+
+  h1RedUndFont "浙东灰度Redis修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_B0DOT1_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="M".*\/>$/p' $ret)"
+  echo
+  done
+  echo
+
+  h1RedUndFont "浙东产品缓存修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/p' $ret)"
+  done
+  echo
+
+  h1RedUndFont "杭州湾产品缓存修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_HZW_BCORE_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/p' $ret)"
+  done
+
+  h1RedUndFont "浙东灰度产品缓存修改结果:\t\t\t"
+  find $TARGET -name CacheConfig.xml|grep RUN_ZD_B0DOT1_PLANE|while read ret;
+  do
+    echo $ret
+    greenFont "$(sed -n '/<server server_code="PceRedisCache" .*belong_group="redis_group[0-9].*\/>$/p' $ret)"
+  done
+}
 # Usage prompt
 function usage(){
   cat <<_EOF
     $(h1RedUndFont "自动修改固化配置文件\n")
-    $(greenBoldFont "Usage:")
+    $(greenFont "Usage:")
     bash $0 目标目录 操作
 
-    $(greenBoldFont "Example:") 
+    $(greenFont "Example:") 
     bash $0 $HOME/workspace/config-esop rename
 
-    $(greenBoldFont "action:")
+    $(greenFont "action:")
     rename: 重命名平面目录
     csf:  修改csf.xml配置文件
     csfCache: 修改csf模块cache.xml配置文件
@@ -188,6 +293,9 @@ case $2 in
     ;;
   logback)
     addLogback
+    ;;
+  cacheConfig)
+    cacheConfig
     ;;
   main)
     renamingPlane
